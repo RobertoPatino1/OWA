@@ -1,9 +1,16 @@
 import numpy as np
-
+from gaussian_weights import gaussian_weights
+from trapezoidal_weights import trapezoidal_weights
+from triangular_weights import triangular_weights
+from sigmoid_function import sigmoid_weights
 # TODO: Agregar nuevos operadores OWA, por ejemplo lineal, exponencial, etc.
+
+
 def calculate_owa(values, weights, criteria):
+
     """
-    Calculates the Ordered Weighted Averaging (OWA) of a set of values, with custom operators like linear and exponential.
+    Calculates the Ordered Weighted Averaging (OWA) of a set of values,
+    with custom operators like linear and exponential.
 
     Parameters:
         values (list or numpy array): The values to aggregate.
@@ -15,23 +22,18 @@ def calculate_owa(values, weights, criteria):
     Returns:
         float: The aggregated OWA result.
     """
-    
     values = np.array(values)
     weights = np.array(weights)
-    
     if not np.isclose(np.sum(weights), 1.0):
         raise ValueError("The sum of weights must be equal to 1.")
-    
-    
     if criteria.get('sort', True):
         values = np.sort(values)[::-1]
-    
     operator = criteria.get('operator', 'linear')
 
     if operator == 'linear':
-        adjusted_weights = weights  
+        adjusted_weights = weights
     elif operator == 'exponential':
-        adjusted_weights = np.exp(weights) / np.sum(np.exp(weights)) 
+        adjusted_weights = np.exp(weights) / np.sum(np.exp(weights))
     elif operator == 'logarithmic':
         adjusted_weights = np.log(weights + 1) / np.sum(np.log(weights + 1))
     elif operator == 'sigmoid':
@@ -50,10 +52,16 @@ def calculate_owa(values, weights, criteria):
     elif operator == 'tanh':
         adjusted_weights = np.tanh(weights)
         adjusted_weights /= np.sum(np.tanh(weights))
+    elif operator == 'triangular':
+        adjusted_weights = triangular_weights(weights)
+    elif operator == 'trapezoidal':
+        adjusted_weights = trapezoidal_weights(weights)
+    elif operator == 'gaussian':
+        adjusted_weights = gaussian_weights(weights)
+    elif operator == 'sigmoid':
+        adjusted_weights = sigmoid_weights(weights)
     else:
         adjusted_weights = weights
 
-
     owa_result = np.dot(values, adjusted_weights)
-    
     return owa_result
