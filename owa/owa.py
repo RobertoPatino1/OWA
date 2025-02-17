@@ -1,8 +1,8 @@
 import numpy as np
-from gaussian_weights import gaussian_weights
 from trapezoidal_weights import trapezoidal_weights
 from triangular_weights import triangular_weights
-from sigmoid_function import sigmoid_weights
+from alpha_cuts import alpha_cut_weights
+from l_r_function import lr_weights
 # TODO: Agregar nuevos operadores OWA, por ejemplo lineal, exponencial, etc.
 
 
@@ -56,10 +56,12 @@ def calculate_owa(values, weights, criteria):
         adjusted_weights = triangular_weights(weights)
     elif operator == 'trapezoidal':
         adjusted_weights = trapezoidal_weights(weights)
-    elif operator == 'gaussian':
-        adjusted_weights = gaussian_weights(weights)
-    elif operator == 'sigmoid':
-        adjusted_weights = sigmoid_weights(weights)
+    elif operator == 'alpha_cut':
+        adjusted_weights = alpha_cut_weights(weights,
+                                             criteria.get('alpha', 0.5))
+    elif operator == 'lr':
+        adjusted_weights = lr_weights(weights, criteria.get('L', 1),
+                                      criteria.get('R', 1))
     else:
         adjusted_weights = weights
 
