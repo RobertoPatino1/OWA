@@ -3,11 +3,15 @@ from trapezoidal_weights import trapezoidal_weights
 from triangular_weights import triangular_weights
 from alpha_cuts import alpha_cut_weights
 from l_r_function import lr_weights
+from harmonic_weights import harmonic_weights
+from softmax_weights import softmax_weights
+from weighted_average_weights import weighted_average_weights
+
+
 # TODO: Agregar nuevos operadores OWA, por ejemplo lineal, exponencial, etc.
 
 
 def calculate_owa(values, weights, criteria):
-
     """
     Calculates the Ordered Weighted Averaging (OWA) of a set of values,
     with custom operators like linear and exponential.
@@ -62,6 +66,13 @@ def calculate_owa(values, weights, criteria):
     elif operator == 'lr':
         adjusted_weights = lr_weights(weights, criteria.get('L', 1),
                                       criteria.get('R', 1))
+    elif operator == 'harmonic':
+        return harmonic_weights(weights)
+    elif operator == 'softmax':
+        return softmax_weights(weights)
+    elif operator == 'weighted_average':
+        custom_weights = criteria.get('custom_weights', None)
+        return weighted_average_weights(weights, custom_weights)
     else:
         adjusted_weights = weights
 
